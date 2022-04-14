@@ -19,6 +19,7 @@ def card_test():
 
 
 def deck_test():
+    """
     print('-----Deck Test-----')
     deck = Blackjack()
     deck.create_deck()
@@ -43,3 +44,10 @@ def deck_test():
     deck4.create_deck()
     print(len(deck4.cards))
     print(deck4)
+    """
+    print('-----Stack Test-----')
+    deck5 = Blackjack('Blackjack', 1)
+    deck5.stack()
+    print(deck5)
+
+deck_test()

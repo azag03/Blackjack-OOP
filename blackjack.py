@@ -33,3 +33,32 @@ class Blackjack(Deck):
                     card = Card(hardValue, softValue, name, suit)
                     # card.flip()
                     self.cards.append(card)
+
+    def stack(self):
+        """
+        Create a deck with cards in a certain order for testing or scamming purposes.
+        """
+        shortSuits = ["C", "S", "H", "D"]
+        suitDictionary = dict(zip(shortSuits, Blackjack.suits))
+        nameDictionary = dict(zip(Blackjack.shortNames, Blackjack.names))
+
+        self._cards = []
+        with open("stacked_deck1.txt", "r") as deckFile:
+            #
+            # stack1.txt is of the form: QC\nAD\n2S\n10H\n...
+            #
+            for line in deckFile:
+                line = line[:-1] # Remove the new line character.
+                shortSuit = line[-1]
+                shortName = line[:-1]
+                try:
+                    name = nameDictionary[shortName]
+                    suit = suitDictionary[shortSuit]
+                    hardValue = Blackjack.hardValues[shortName]
+                    softValue = Blackjack.softValues[shortName]
+                    card = Card(hardValue, softValue, name, suit)
+                    self._cards.append(card)
+                except:
+                    raise ValueError(f"'{shortName}{shortSuit}' does not correspond to a known card.")
+
+
