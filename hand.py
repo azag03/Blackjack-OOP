@@ -86,9 +86,14 @@ class Hand(object):
         return isBlackjack
 
     def is_doubled(self):
-        pass
+        """Checks to see if a hand is doubled."""
+        isDoubled = False
+        # if self.bet == 2 * self._bet:
+            # isDoubled = True
+        return isDoubled
 
     def is_split(self):
+        """Checks to see if a hand is split."""
         pass
 
     def is_busted(self):

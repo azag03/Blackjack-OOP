@@ -73,6 +73,7 @@ def hand_test():
     c.flip()
     h.double_down(c, h.bet)
     print(h)
+    print(h.is_doubled())
     # should be busted now if first cards are K, Q, J
     print('Is busted:', h.is_busted())
     try:
