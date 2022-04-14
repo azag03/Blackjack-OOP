@@ -1,3 +1,6 @@
+from callError import CallError
+
+
 class Hand(object):
 
     def __init__(self, bet):
@@ -38,7 +41,10 @@ class Hand(object):
 
     def hit(self, card):
         """Adds a card to a hand."""
-        self._cards.append(card)
+        if self.can_hit():
+            self._cards.append(card)
+        else:
+            raise CallError('Cannot hit a closed hand')
 
     def can_split(self):
         """Checks to see if a hand is able to split."""
@@ -64,8 +70,11 @@ class Hand(object):
 
     def double_down(self, card, bet):
         """Doubles down on a hand and hits one last time."""
-        self._bet += bet
-        self.hit(card)
+        if self.can_double():
+            self._bet += bet
+            self.hit(card)
+        else:
+            raise CallError('Can only double down after being dealt two cards from the dealer.')
 
     def is_blackjack(self):
         """Checks to see if a hand is blackjack."""

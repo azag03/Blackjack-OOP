@@ -2,6 +2,7 @@
 from card import Card
 from blackjackDeck import BlackjackDeck
 from hand import Hand
+from callError import CallError
 
 
 # def main():
@@ -78,8 +79,8 @@ def hand_test():
         c = d.pop()
         c.flip()
         h.hit(c)
-    except TypeError:
-        print("tried and failed to hit a busted hand.")
+    except CallError:
+        print("Tried and failed to hit a busted hand.")
 
 
-card_test()
+hand_test()
