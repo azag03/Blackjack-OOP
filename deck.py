@@ -16,11 +16,24 @@ class Deck(object):
         return string
 
     def shuffle(self):
-        """Shuffles the deck."""
+        """Shuffles a deck."""
         random.shuffle(self._cards)
 
     def pop(self):
-        """Removes a card from the list of cards to be dealt."""
-        card = random.choice(self._cards)
+        """Removes a card from the top of a deck."""
+        #
+        # Takes the top card from a deck and removes it
+        #
+        card = self._cards[0]
         self._cards.remove(card)
-        print(card)
+        return card
+
+    def flip(self):
+        """Flips all the cards in the deck, so we can see their suit."""
+        for card in self._cards:
+            card.flip()
+
+    def get_cards(self):
+        return self._cards
+
+    cards = property(get_cards)
