@@ -7,6 +7,7 @@ class Hand(object):
         self._cards = []
         self._bet = bet
         self.isDone = False
+        self.gitTest = None
 
     def __str__(self):
         if self.isDone:

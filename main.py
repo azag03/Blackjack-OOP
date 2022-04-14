@@ -47,6 +47,11 @@ def deck_test():
     print(len(deck4.cards))
     print(deck4)
 
+    print('-----Stack Test-----')
+    deck5 = BlackjackDeck('Blackjack', 2)
+    deck5.stack()
+    print(deck5)
+
 
 def hand_test():
     d = BlackjackDeck()
@@ -83,5 +88,5 @@ def hand_test():
     except CallError:
         print("Tried and failed to hit a busted hand.")
 
-
+deck_test()
 hand_test()
