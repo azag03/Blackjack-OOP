@@ -31,7 +31,7 @@ class Deck(object):
         return card
 
     def flip(self):
-        """Flips all the cards in the deck, so we can see their suit."""
+        """Flips all the cards in the deck, so we can see their suit in order for testing."""
         for card in self._cards:
             card.flip()
 

@@ -2,7 +2,7 @@
 from card import Card
 from blackjackDeck import BlackjackDeck
 from hand import Hand
-from callError import CallError
+from errors import CallError
 
 
 # def main():
@@ -62,6 +62,7 @@ def hand_test():
     c = d.pop()
     c.flip()
     print(c)
+    print(h.can_hit())
     if h.can_hit():
         h.hit(c)
         print(h)
@@ -78,9 +79,9 @@ def hand_test():
     c.flip()
     h.double_down(c, h.bet)
     print(h)
-    print(h.is_doubled())
+    print(f'Is Doubled:', h.is_doubled())
     # should be busted now if first cards are K, Q, J
-    print('Is busted:', h.is_busted())
+    print('Is Busted:', h.is_busted())
     try:
         c = d.pop()
         c.flip()
@@ -88,5 +89,26 @@ def hand_test():
     except CallError:
         print("Tried and failed to hit a busted hand.")
 
-deck_test()
+    d2 = BlackjackDeck()
+    d2.stack()
+    h = Hand(10)
+    c = d2.pop()
+    c.flip()
+    if h.can_hit():
+        h.hit(c)
+        print(h)
+    c = d2.pop()
+    c.flip()
+    if h.can_hit():
+        h.hit(c)
+        print(h)
+    print('Is Blackjack:', h.is_blackjack())
+    try:
+        c = d2.pop()
+        c.flip()
+        h.hit(c)
+    except CallError:
+        print("Tried and failed to hit a hand with Blackjack.")
+
+
 hand_test()

@@ -1,4 +1,4 @@
-from callError import CallError
+from errors import CallError
 
 
 class Hand(object):
@@ -6,12 +6,13 @@ class Hand(object):
     def __init__(self, bet):
         self._cards = []
         self._bet = bet
+        self.isDoubled = False
+        self.isSplit = False
         self.isDone = False
-        self.gitTest = None
 
     def __str__(self):
         if self.isDone:
-            string = 'Hand can no longer be played'
+            string = 'Hand is no longer playable'
         else:
             string = f'Bet: {self._bet}\n'
             string += 'Hand:\n'
@@ -56,7 +57,12 @@ class Hand(object):
 
     def split(self):
         """Splits a hand into two separate ones."""
-        pass
+        if self.can_split():
+            card = self._cards.pop()
+            self.isSplit = True
+        else:
+            raise CallError('Can only split 2 cards of the same value.')
+        return card
 
     def stand(self):
         """Disables a hand from being played."""
@@ -74,6 +80,7 @@ class Hand(object):
         if self.can_double():
             self._bet += bet
             self.hit(card)
+            self.isDoubled = True
         else:
             raise CallError('Can only double down after being dealt two cards from the dealer.')
 
@@ -86,23 +93,20 @@ class Hand(object):
                     isBlackjack = True
         return isBlackjack
 
-    def is_doubled(self):
-        """Checks to see if a hand is doubled."""
-        isDoubled = False
-        # if self.bet == 2 * self._bet:
-            # isDoubled = True
-        return isDoubled
-
-    def is_split(self):
-        """Checks to see if a hand is split."""
-        pass
-
     def is_busted(self):
         """Checks to see if a hand is busted"""
         isBusted = False
         if self.hard_value() > 21:
             isBusted = True
         return isBusted
+
+    def is_doubled(self):
+        """Checks to see if a hand is doubled."""
+        return self.isDoubled
+
+    def is_split(self):
+        """Checks to see if a hand is split."""
+        return self.isSplit
 
     def get_bet(self):
         return self._bet
