@@ -103,6 +103,7 @@ def hand_test():
         h.hit(c)
         print(h)
     print('Is Blackjack:', h.is_blackjack())
+    print(h)
     try:
         c = d2.pop()
         c.flip()

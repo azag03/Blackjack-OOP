@@ -91,6 +91,7 @@ class Hand(object):
             if self._cards[0].shortName and self._cards[1].shortName in ['A', 'K', 'Q', 'J', '10']:
                 if self.soft_value() == 21:
                     isBlackjack = True
+                    self.isDone = True
         return isBlackjack
 
     def is_busted(self):
@@ -98,10 +99,13 @@ class Hand(object):
         isBusted = False
         if self.hard_value() > 21:
             isBusted = True
+            self.isDone = True
         return isBusted
 
     def is_doubled(self):
         """Checks to see if a hand is doubled."""
+        if self.isDoubled:
+            self.isDone = True
         return self.isDoubled
 
     def is_split(self):
