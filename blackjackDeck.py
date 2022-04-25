@@ -20,6 +20,7 @@ class BlackjackDeck(Deck):
 
     def __init__(self, deckType='Blackjack', size=1):
         super().__init__(deckType, size)
+        self.create_deck()
 
     def create_deck(self):
         """Creates a deck based on the given card information."""
@@ -29,7 +30,7 @@ class BlackjackDeck(Deck):
         #
         for deck in range(self._size):
             #
-            # Zip(): Allows you to loops through two lists at the same time (puts the two lists together in a tuple
+            # Zip(): Allows you to loop through two lists at the same time (puts the two lists together in a tuple
             # (x,y) allowing for easy access)
             #
             for suit, shortSuit in zip(BlackjackDeck.suits, BlackjackDeck.shortSuits):

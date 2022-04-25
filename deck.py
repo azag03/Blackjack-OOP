@@ -10,7 +10,7 @@ class Deck(object):
 
     def __str__(self):
         string = f'Deck Type: {self._deckType}\n'
-        string += f'Size: {len(self._cards)}\n'
+        string += f'Size: {self._size}\n'
         for card in self._cards:
             card.flip()
             string += f'{card}\n'

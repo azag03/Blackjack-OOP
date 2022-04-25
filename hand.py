@@ -115,4 +115,8 @@ class Hand(object):
     def get_bet(self):
         return self._bet
 
+    def get_cards(self):
+        return self._cards
+
+    cards = property(get_cards)
     bet = property(get_bet)

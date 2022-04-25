@@ -1,7 +1,8 @@
-# from table import Table
+from table import Table
 from card import Card
 from blackjackDeck import BlackjackDeck
 from hand import Hand
+from player import Player
 from errors import CallError
 
 
@@ -112,4 +113,21 @@ def hand_test():
         print("Tried and failed to hit a hand with Blackjack.")
 
 
-hand_test()
+def dealer_test():
+    table = Table()
+    player1 = Player('Player1', 1000)
+    player2 = Player('Player2', 1000)
+    player3 = Player('Player3', 1000)
+    table.add_player(player1)
+    table.add_player(player2)
+    table.add_player(player3)
+    table.dealer.ask_in()
+    table.dealer.deal()
+    table.dealer.process_hands()
+    print(table.dealer.money)
+    print(player1.money)
+    print(player2.money)
+    print(player3.money)
+
+
+dealer_test()
