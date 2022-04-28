@@ -1,4 +1,6 @@
 from dealer import Dealer
+from player import Player
+from toolbox import get_integer_between
 
 
 class Table(object):
@@ -11,7 +13,21 @@ class Table(object):
         pass
 
     def manage(self):
-        pass
+        """Runs the blackjack program."""
+        numberOfPlayers = get_integer_between(1, 7, 'How many players will there be?')
+        #
+        # Range from 1 to numberOfPlayers+1, so I don't ask for player 0's name
+        #
+        for number in range(1, numberOfPlayers+1):
+            name = input(f"What is player {number}'s name? ")
+            player = Player(name, 100)
+            self._players.append(player)
+        self._dealer.take_bets()
+        while self._players is not None:
+            self._dealer.deal()
+            self._dealer.play_hands()
+            self._dealer.process_hands()
+        print('Table is empty. Dealer can go home.')
 
     def add_player(self, player):
         self._players.append(player)

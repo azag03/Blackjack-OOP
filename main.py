@@ -6,9 +6,9 @@ from player import Player
 from errors import CallError
 
 
-# def main():
-# table = Table()
-# table.manage()
+def main():
+    table = Table()
+    table.manage()
 
 
 def card_test():
@@ -123,11 +123,12 @@ def dealer_test():
     table.add_player(player3)
     table.dealer.ask_in()
     table.dealer.deal()
+    for player in table.players:
+        player.play()
     table.dealer.process_hands()
     print(table.dealer.money)
-    print(player1.money)
-    print(player2.money)
-    print(player3.money)
+    for player in table.players:
+        print(player.money)
 
 
-dealer_test()
+main()

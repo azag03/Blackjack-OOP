@@ -1,6 +1,6 @@
 from blackjackDeck import BlackjackDeck
 from hand import Hand
-from toolbox import get_boolean
+from toolbox import get_integer_between
 
 
 class Dealer(object):
@@ -16,15 +16,21 @@ class Dealer(object):
         string = f'Dealer {self._name}:\n{self._hand}'
         return string
 
-    def ask_in(self):
-        """Asks a player if they want to buy in."""
+    def take_bets(self):
+        """Allows the player to place an initial bet; creates a hand from that bet."""
+        hand = None
         for player in self._table.players:
-            buyIn = get_boolean(f'Do you want to buy in {player.name}?')
-            if buyIn:
-                player.buy_in()
+            bet = get_integer_between(0, player.money, f'How much would you like to bet on this hand, {player.name}?')
+            if bet == 0:
+                print(f'{player.name} is sitting out this hand.')
+            else:
+                hand = Hand(bet)
+                player.money -= bet
+                player.hands.append(hand)
+        return hand
 
     def deal(self):
-        """Passes out the first two cards to the dealer and each of the players."""
+        """Passes out the initial two cards to the dealer and each of the players."""
         for _ in range(2):
             dealerCard = self._deck.pop()
             dealerCard.flip()
@@ -35,7 +41,47 @@ class Dealer(object):
                 for hand in player.hands:
                     card.flip()
                     hand.hit(card)
-                    print(hand)
+                    print(player)
+
+    def play_hands(self):
+        """Loops through each players' hand and performs their desired action."""
+        for player in self._table.players:
+            for hand in player.hands:
+                command = player.play(hand)
+                if command == 'H':
+                    self.player_hit(hand)
+                elif command == 'S':
+                    self.player_stand(hand)
+                elif command == 'D':
+                    self.player_double(hand)
+                elif command == 'P':
+                    self.player_split(player, hand)
+
+    def player_hit(self, hand):
+        """Hits a player's hand."""
+        card = self._deck.pop()
+        card.flip()
+        hand.hit(card)
+
+    def player_stand(self, hand):
+        """Disables a player's hand."""
+        hand.stand()
+
+    def player_double(self, hand):
+        """Doubles a player's hand."""
+        card = self._deck.pop()
+        card.flip()
+        hand.double_down(card, hand.bet)
+
+    def player_split(self, player, hand):
+        """Splits and player's hand."""
+        card = hand.split()
+        newBet = get_integer_between(0, player.money, f'How much would you like to bet on this hand, {player.name}?')
+        newHand = Hand(newBet)
+        newHand.cards.append(card)
+        self.player_hit(newHand)
+        player.money -= newBet
+        player.hands.append(newHand)
 
     def shuffle(self):
         """Shuffles his deck."""

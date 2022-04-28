@@ -1,7 +1,3 @@
-from toolbox import get_integer_between
-from hand import Hand
-
-
 class Player(object):
 
     def __init__(self, name, money):
@@ -10,19 +6,31 @@ class Player(object):
         self._money = money
 
     def __str__(self):
-        return f'Name: {self._name}\nAmount: {self._money}\nHands: {self._hands}'
+        string = f'Name: {self._name}\nMoney: {self._money}\n'
+        for hand in self._hands:
+            string += f'{hand}'
+        return string
 
-    def buy_in(self):
-        """Allows the player to place an initial bet; creates a hand from that bet."""
-        bet = get_integer_between(0, self._money, f'How much would you like to bet {self._name}?')
-        self._money -= bet
-        hand = Hand(bet)
+    def add_hand(self, hand):
+        """Adds a hand to self._hands."""
         self._hands.append(hand)
-        return hand
 
-    # def join_table(self):
-
-    # def leave_table(self):
+    def play(self, hand):
+        """Returns a players move (either hit, stand, double, or split)."""
+        commandString = '[H]it      [S]tand     [D]ouble        s[P]lit\n'
+        validCommands = 'HSDP'
+        print(hand)
+        command = None
+        if hand.isDone:
+            print('Hand cannot be played.')
+        else:
+            print(commandString)
+            prompt = f"Your move {self._name}: "
+            command = input(prompt).upper()
+            while command not in validCommands:
+                prompt += '(type the corresponding letter) '
+                command = input(prompt).upper()
+        return command
 
     def get_hands(self):
         return self._hands
