@@ -7,7 +7,7 @@ class Table(object):
 
     def __init__(self):
         self._players = []
-        self._dealer = Dealer('Dealer', 10000, self)
+        self._dealer = Dealer('Roy', 10000, self)
 
     def __str__(self):
         pass
@@ -26,6 +26,7 @@ class Table(object):
         while self._players is not None:
             self._dealer.deal()
             self._dealer.play_hands()
+            self._dealer.play_own()
             self._dealer.process_hands()
         print('Table is empty. Dealer can go home.')
 

@@ -13,7 +13,7 @@ class Dealer(object):
         self._table = table
 
     def __str__(self):
-        string = f'Dealer {self._name}:\n{self._hand}'
+        string = f'Dealer: {self._name}\n{self._hand}'
         return string
 
     def take_bets(self):
@@ -35,7 +35,7 @@ class Dealer(object):
             dealerCard = self._deck.pop()
             dealerCard.flip()
             self._hand.cards.append(dealerCard)
-            print(self._hand)
+            print(self)
             for player in self._table.players:
                 card = self._deck.pop()
                 for hand in player.hands:
@@ -56,6 +56,18 @@ class Dealer(object):
                     self.player_double(hand)
                 elif command == 'P':
                     self.player_split(player, hand)
+
+    def play_own(self):
+        """Plays the dealer's hand."""
+        #
+        # Dealer must hit on soft-values below 17 and stand on 17 and above.
+        #
+        if self._hand.soft_value() < 17:
+            card = self._deck.pop()
+            self._hand.hit(card)
+        else:
+            self._hand.stand()
+        print(self)
 
     def player_hit(self, hand):
         """Hits a player's hand."""

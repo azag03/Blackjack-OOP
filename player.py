@@ -19,12 +19,12 @@ class Player(object):
         """Returns a players move (either hit, stand, double, or split)."""
         commandString = '[H]it      [S]tand     [D]ouble        s[P]lit\n'
         validCommands = 'HSDP'
-        print(hand)
         command = None
         if hand.isDone:
             print('Hand cannot be played.')
         else:
             print(commandString)
+            print(hand)
             prompt = f"Your move {self._name}: "
             command = input(prompt).upper()
             while command not in validCommands:
