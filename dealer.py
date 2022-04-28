@@ -35,13 +35,14 @@ class Dealer(object):
             dealerCard = self._deck.pop()
             dealerCard.flip()
             self._hand.cards.append(dealerCard)
-            print(self)
             for player in self._table.players:
-                card = self._deck.pop()
                 for hand in player.hands:
+                    card = self._deck.pop()
                     card.flip()
                     hand.hit(card)
-                    print(player)
+        print(self)
+        for player in self._table.players:
+            print(player)
 
     def play_hands(self):
         """Loops through each players' hand and performs their desired action."""

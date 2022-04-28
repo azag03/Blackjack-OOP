@@ -6,18 +6,22 @@ class Hand(object):
     def __init__(self, bet):
         self._cards = []
         self._bet = bet
+        self.isStood = False
         self.isDoubled = False
         self.isSplit = False
         self.isDone = False
 
     def __str__(self):
-        if self.isDone:
-            string = 'Hand is no longer playable'
-        else:
-            string = f'Bet: {self._bet}\n'
-            string += 'Hand:\n'
-            for card in self._cards:
-                string += f'{card}\n'
+        string = f'Bet: {self._bet}\n'
+        string += 'Hand:\n'
+        for card in self._cards:
+            string += f'{card}\n'
+        if self.isStood:
+            string += 'Player chose to stand (hand is no longer playable)'
+        elif self.isDoubled:
+            string += 'Hand has been doubled (hand is no longer playable)'
+        elif self.is_busted():
+            string += 'Hand is busted (hand is no longer playable)'
         return string
 
     def soft_value(self):
@@ -66,7 +70,7 @@ class Hand(object):
 
     def stand(self):
         """Disables a hand from being played."""
-        self.isDone = True
+        self.isStood = True
 
     def can_double(self):
         """Checks to see if a hand is able to double down."""
@@ -91,7 +95,6 @@ class Hand(object):
             if self._cards[0].shortName and self._cards[1].shortName in ['A', 'K', 'Q', 'J', '10']:
                 if self.soft_value() == 21:
                     isBlackjack = True
-                    self.isDone = True
         return isBlackjack
 
     def is_busted(self):
@@ -99,13 +102,10 @@ class Hand(object):
         isBusted = False
         if self.hard_value() > 21:
             isBusted = True
-            self.isDone = True
         return isBusted
 
     def is_doubled(self):
         """Checks to see if a hand is doubled."""
-        if self.isDoubled:
-            self.isDone = True
         return self.isDoubled
 
     def is_split(self):
