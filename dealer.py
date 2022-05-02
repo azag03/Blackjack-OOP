@@ -13,7 +13,7 @@ class Dealer(object):
         self._table = table
 
     def __str__(self):
-        string = f'Dealer: {self._name}\n{self._hand}'
+        string = f'Dealer: {self._name}\n\n{self._hand}'
         return string
 
     def take_bets(self):
@@ -48,15 +48,16 @@ class Dealer(object):
         """Loops through each players' hand and performs their desired action."""
         for player in self._table.players:
             for hand in player.hands:
-                command = player.play(hand)
-                if command == 'H':
-                    self.player_hit(hand)
-                elif command == 'T':
-                    self.player_stand(hand)
-                elif command == 'D':
-                    self.player_double(hand)
-                elif command == 'S':
-                    self.player_split(player, hand)
+                while hand.can_play():
+                    command = player.play(hand)
+                    if command == 'H':
+                        self.player_hit(hand)
+                    elif command == 'T':
+                        self.player_stand(hand)
+                    elif command == 'D':
+                        self.player_double(hand)
+                    elif command == 'S':
+                        self.player_split(player, hand)
         for player in self._table.players:
             print(player)
 
@@ -119,13 +120,15 @@ class Dealer(object):
             for hand in player.hands:
                 if hand.is_busted():
                     self._money += hand.bet
+                elif self._hand.is_busted() and not hand.is_busted:
+                    player.money += 1.5 * hand.bet
                 elif hand.is_blackjack() and not self._hand.is_blackjack():
                     player.money += 1.5 * hand.bet
                 elif hand.soft_value() == self._hand.soft_value():
                     player.money += hand.bet
-                elif hand.soft_value() < self._hand.soft_value():
+                elif hand.soft_value() < self._hand.soft_value() and not self._hand.is_busted():
                     self._money += hand.bet
-                elif hand.soft_value() > self._hand.soft_value():
+                elif self._hand.soft_value() < hand.soft_value() and not hand.is_busted():
                     player.money += 1.5 * hand.bet
         print(self._money)
         for player in self._table.players:

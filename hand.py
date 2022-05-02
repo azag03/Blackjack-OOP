@@ -38,6 +38,14 @@ class Hand(object):
             value += card.hardValue
         return value
 
+    def can_play(self):
+        """Returns whether a hand is playable."""
+        if self.isDone:
+            canPlay = False
+        else:
+            canPlay = True
+        return canPlay
+
     def can_hit(self):
         """Checks to see if a hand is able to hit."""
         canHit = True

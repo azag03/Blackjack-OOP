@@ -6,9 +6,9 @@ class Player(object):
         self._money = money
 
     def __str__(self):
-        string = f'Name: {self._name}\nMoney: {self._money}\n'
+        string = f'Name: {self._name}\nMoney: {self._money}\n\n'
         for hand in self._hands:
-            string += f'{hand}'
+            string += f'{hand}\n'
         return string
 
     def add_hand(self, hand):
@@ -23,14 +23,13 @@ class Player(object):
         if hand.isDone:
             print('Hand cannot be played.')
         else:
-            for hand in self._hands:
-                print(commandString)
-                print(hand)
-                prompt = f"Your move {self._name}: "
+            print(commandString)
+            print(hand)
+            prompt = f"Your move {self._name}: "
+            command = input(prompt).upper()
+            while command not in validCommands:
+                prompt += '(type the corresponding letter) '
                 command = input(prompt).upper()
-                while command not in validCommands:
-                    prompt += '(type the corresponding letter) '
-                    command = input(prompt).upper()
         return command
 
     def get_hands(self):
