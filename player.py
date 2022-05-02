@@ -17,19 +17,20 @@ class Player(object):
 
     def play(self, hand):
         """Returns a players move (either hit, stand, double, or split)."""
-        commandString = '[H]it      [S]tand     [D]ouble        s[P]lit\n'
-        validCommands = 'HSDP'
+        commandString = '[H]it     [D]ouble        [S]plit      s[T]and\n'
+        validCommands = 'HSDT'
         command = None
         if hand.isDone:
             print('Hand cannot be played.')
         else:
-            print(commandString)
-            print(hand)
-            prompt = f"Your move {self._name}: "
-            command = input(prompt).upper()
-            while command not in validCommands:
-                prompt += '(type the corresponding letter) '
+            for hand in self._hands:
+                print(commandString)
+                print(hand)
+                prompt = f"Your move {self._name}: "
                 command = input(prompt).upper()
+                while command not in validCommands:
+                    prompt += '(type the corresponding letter) '
+                    command = input(prompt).upper()
         return command
 
     def get_hands(self):

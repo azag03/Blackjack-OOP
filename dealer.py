@@ -20,7 +20,7 @@ class Dealer(object):
         """Allows the player to place an initial bet; creates a hand from that bet."""
         hand = None
         for player in self._table.players:
-            bet = get_integer_between(0, player.money, f'How much would you like to bet on this hand, {player.name}?')
+            bet = get_integer_between(0, player.money, f'How much would you like to bet this round, {player.name}?')
             if bet == 0:
                 print(f'{player.name} is sitting out this hand.')
             else:
@@ -51,11 +51,11 @@ class Dealer(object):
                 command = player.play(hand)
                 if command == 'H':
                     self.player_hit(hand)
-                elif command == 'S':
+                elif command == 'T':
                     self.player_stand(hand)
                 elif command == 'D':
                     self.player_double(hand)
-                elif command == 'P':
+                elif command == 'S':
                     self.player_split(player, hand)
 
     def play_own(self):
@@ -81,24 +81,35 @@ class Dealer(object):
         hand.stand()
 
     def player_double(self, hand):
-        """Doubles a player's hand."""
+        """Doubles down on a player's hand."""
         card = self._deck.pop()
         card.flip()
         hand.double_down(card, hand.bet)
+        print(hand, hand.bet)
 
     def player_split(self, player, hand):
         """Splits and player's hand."""
         card = hand.split()
-        newBet = get_integer_between(0, player.money, f'How much would you like to bet on this hand, {player.name}?')
+        newBet = get_integer_between(0, player.money, f"What's the bet on this new hand, {player.name}?")
         newHand = Hand(newBet)
         newHand.cards.append(card)
-        self.player_hit(newHand)
         player.money -= newBet
         player.hands.append(newHand)
+        for hand in player.hands:
+            print(hand)
 
     def shuffle(self):
         """Shuffles his deck."""
         self._deck.shuffle()
+
+    def cleanup(self):
+        """Removes a finished hand from a player's list of hands."""
+        print('\nRound is over next round begins now.\n')
+        for card in self._hand.cards:
+            self._hand.cards.remove(card)
+        for player in self._table.players:
+            for hand in player.hands:
+                player.hands.remove(hand)
 
     def process_hands(self):
         """For each completed hand, performs the respective command (pay out, draw, or rake in)."""
@@ -114,6 +125,9 @@ class Dealer(object):
                     self._money += hand.bet
                 elif hand.soft_value() > self._hand.soft_value():
                     player.money += 1.5 * hand.bet
+        print(self._money)
+        for player in self._table.players:
+            print(player.money)
 
     def get_money(self):
         return self._money

@@ -28,6 +28,8 @@ class Table(object):
             self._dealer.play_hands()
             self._dealer.play_own()
             self._dealer.process_hands()
+            self._dealer.cleanup()
+            self._dealer.take_bets()
         print('Table is empty. Dealer can go home.')
 
     def add_player(self, player):
