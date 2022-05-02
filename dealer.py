@@ -57,6 +57,8 @@ class Dealer(object):
                     self.player_double(hand)
                 elif command == 'S':
                     self.player_split(player, hand)
+        for player in self._table.players:
+            print(player)
 
     def play_own(self):
         """Plays the dealer's hand."""
