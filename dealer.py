@@ -48,7 +48,7 @@ class Dealer(object):
         """Loops through each players' hand and performs their desired action."""
         for player in self._table.players:
             for hand in player.hands:
-                while hand.can_play():
+                while not hand.is_done():
                     command = player.play(hand)
                     if command == 'H':
                         self.player_hit(hand)
@@ -66,10 +66,11 @@ class Dealer(object):
         #
         # Dealer must hit on soft-values below 17 and stand on 17 and above.
         #
-        if self._hand.soft_value() < 17:
+        while self._hand.soft_value() < 17:
             card = self._deck.pop()
+            card.flip()
             self._hand.hit(card)
-        else:
+        if self._hand.soft_value() > 17:
             self._hand.stand()
         print(self)
 
@@ -106,14 +107,22 @@ class Dealer(object):
         self._deck.shuffle()
 
     def cleanup(self):
-        """Removes a finished hand from a player's list of hands."""
+        """Removes cards from everyone's hands."""
         print('\nRound is over next round begins now.\n')
-        for card in self._hand.cards:
-            self._hand.cards.remove(card)
+        self._hand.cards = []
+        #
+        # Gets rid of the print statement from the last round.
+        #
+        self._hand.isStood = False
+        self._hand.isDoubled = False
+        self._hand.isSplit = False
         for player in self._table.players:
             for hand in player.hands:
                 player.hands.remove(hand)
 
+    #
+    # Why doesn't this work??
+    #
     def process_hands(self):
         """For each completed hand, performs the respective command (pay out, draw, or rake in)."""
         for player in self._table.players:
@@ -124,11 +133,11 @@ class Dealer(object):
                     player.money += 1.5 * hand.bet
                 elif hand.is_blackjack() and not self._hand.is_blackjack():
                     player.money += 1.5 * hand.bet
-                elif hand.soft_value() == self._hand.soft_value():
+                elif hand.value() == self._hand.value():
                     player.money += hand.bet
-                elif hand.soft_value() < self._hand.soft_value() and not self._hand.is_busted():
+                elif hand.value() < self._hand.value():
                     self._money += hand.bet
-                elif self._hand.soft_value() < hand.soft_value() and not hand.is_busted():
+                elif hand.value() > self._hand.value():
                     player.money += 1.5 * hand.bet
         print(self._money)
         for player in self._table.players:

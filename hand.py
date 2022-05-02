@@ -9,7 +9,6 @@ class Hand(object):
         self.isStood = False
         self.isDoubled = False
         self.isSplit = False
-        self.isDone = False
 
     def __str__(self):
         string = f'Bet: {self._bet}\n'
@@ -22,6 +21,8 @@ class Hand(object):
             string += 'Hand has been doubled (hand is no longer playable)'
         elif self.is_busted():
             string += 'Hand is busted (hand is no longer playable)'
+        elif self.is_blackjack():
+            string += 'Blackjack!!'
         return string
 
     def soft_value(self):
@@ -38,13 +39,23 @@ class Hand(object):
             value += card.hardValue
         return value
 
-    def can_play(self):
+    def value(self):
+        """Returns the value of a hand."""
+        value = self.soft_value()
+        #
+        # If a hand exceeds 21, value switches to the hard value of a hand.
+        #
+        if value > 21:
+            value = self.hard_value()
+        return value
+
+    def is_done(self):
         """Returns whether a hand is playable."""
-        if self.isDone:
-            canPlay = False
+        if self.isDoubled or self.isStood or self.is_busted() or self.isDoubled or self.is_blackjack():
+            isDone = True
         else:
-            canPlay = True
-        return canPlay
+            isDone = False
+        return isDone
 
     def can_hit(self):
         """Checks to see if a hand is able to hit."""
@@ -79,7 +90,6 @@ class Hand(object):
     def stand(self):
         """Disables a hand from being played."""
         self.isStood = True
-        self.isDone = True
 
     def can_double(self):
         """Checks to see if a hand is able to double down."""
@@ -94,7 +104,6 @@ class Hand(object):
             self._bet += bet
             self.hit(card)
             self.isDoubled = True
-            self.isDone = True
         else:
             raise CallError('Can only double down after being dealt two cards from the dealer.')
 
@@ -103,17 +112,15 @@ class Hand(object):
         isBlackjack = False
         if len(self._cards) == 2:
             if self._cards[0].shortName and self._cards[1].shortName in ['A', 'K', 'Q', 'J', '10']:
-                if self.soft_value() == 21:
+                if self.value() == 21:
                     isBlackjack = True
-                    self.isDone = True
         return isBlackjack
 
     def is_busted(self):
         """Checks to see if a hand is busted"""
         isBusted = False
-        if self.hard_value() > 21:
+        if self.value() > 21:
             isBusted = True
-            self.isDone = True
         return isBusted
 
     def is_doubled(self):
@@ -130,5 +137,8 @@ class Hand(object):
     def get_cards(self):
         return self._cards
 
-    cards = property(get_cards)
+    def set_cards(self, cards):
+        self._cards = cards
+
+    cards = property(get_cards, set_cards)
     bet = property(get_bet)
