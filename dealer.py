@@ -20,9 +20,12 @@ class Dealer(object):
         """Allows the player to place an initial bet; creates a hand from that bet."""
         hand = None
         for player in self._table.players:
-            bet = get_integer_between(0, player.money, f'How much would you like to bet this round, {player.name}?')
+            bet = get_integer_between(-1, player.money, f'How much would you like to bet this round, {player.name}?')
             if bet == 0:
                 print(f'{player.name} is sitting out this hand.')
+            elif bet == -1:
+                print(f'{player.name} has left the table.')
+                self.player_leave(player)
             else:
                 hand = Hand(bet)
                 player.money -= bet
@@ -31,6 +34,9 @@ class Dealer(object):
 
     def deal(self):
         """Passes out the initial two cards to the dealer and each of the players."""
+        if self._deck.should_shuffle():
+            self.shuffle()
+            print('Deck has been shuffled.')
         for _ in range(2):
             dealerCard = self._deck.pop()
             dealerCard.flip()
@@ -52,11 +58,11 @@ class Dealer(object):
                     command = player.play(hand)
                     if command == 'H':
                         self.player_hit(hand)
-                    elif command == 'T':
+                    elif command == 'S':
                         self.player_stand(hand)
                     elif command == 'D':
                         self.player_double(hand)
-                    elif command == 'S':
+                    elif command == 'P':
                         self.player_split(player, hand)
         for player in self._table.players:
             print(player)
@@ -102,8 +108,13 @@ class Dealer(object):
         for hand in player.hands:
             print(hand)
 
+    def player_leave(self, player):
+        """Removes a player from the table."""
+        self._table.players.remove(player)
+
     def shuffle(self):
         """Shuffles his deck."""
+        self._deck = BlackjackDeck()
         self._deck.shuffle()
 
     def cleanup(self):
@@ -117,8 +128,7 @@ class Dealer(object):
         self._hand.isDoubled = False
         self._hand.isSplit = False
         for player in self._table.players:
-            for hand in player.hands:
-                player.hands.remove(hand)
+            player.hands = []
 
     def process_hands(self):
         """For each completed hand, performs the respective command (pay out, draw, or rake in)."""
@@ -127,23 +137,22 @@ class Dealer(object):
                 if hand.is_busted():
                     self._money += hand.bet
                     print('Player hand is busted.')
-                elif self._hand.is_busted() and not hand.is_busted:
-                    player.money += 1.5 * hand.bet
-                    print('Dealer hand is busted.')
-                elif hand.is_blackjack() and not self._hand.is_blackjack():
-                    player.money += 1.5 * hand.bet
-                    print('Player hand is blackjack.')
                 elif hand.value() == self._hand.value():
                     player.money += hand.bet
                     print('Player and dealer hands have the same value.')
+                elif hand.is_blackjack():
+                    player.money += 2.5 * hand.bet
+                    print('Player hand is blackjack.')
+                elif self._hand.is_busted():
+                    player.money += 2 * hand.bet
+                    print('Dealer hand is busted.')
                 elif hand.value() < self._hand.value():
                     self._money += hand.bet
                     print('Dealer hand is higher.')
                 elif hand.value() > self._hand.value():
-                    player.money += 1.5 * hand.bet
+                    player.money += 2 * hand.bet
                     print('Player hand is higher.')
         print(self._money)
-        print(self._hand.is_busted())
         for player in self._table.players:
             print(player.money)
 

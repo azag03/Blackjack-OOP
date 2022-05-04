@@ -17,6 +17,13 @@ class Deck(object):
             card.flip()
         return string
 
+    def should_shuffle(self):
+        """Returns whether a deck should be shuffled."""
+        shouldShuffle = False
+        if len(self._cards) < 20:
+            shouldShuffle = True
+        return shouldShuffle
+
     def shuffle(self):
         """Shuffles a deck."""
         random.shuffle(self._cards)

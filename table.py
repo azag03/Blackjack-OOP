@@ -23,7 +23,7 @@ class Table(object):
             player = Player(name, 100)
             self._players.append(player)
         self._dealer.take_bets()
-        while self._players is not None:
+        while self._players:
             self._dealer.deal()
             self._dealer.play_hands()
             self._dealer.play_own()

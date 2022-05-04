@@ -110,10 +110,8 @@ class Hand(object):
     def is_blackjack(self):
         """Checks to see if a hand is blackjack."""
         isBlackjack = False
-        if len(self._cards) == 2:
-            if self._cards[0].shortName and self._cards[1].shortName in ['A', 'K', 'Q', 'J', '10']:
-                if self.value() == 21:
-                    isBlackjack = True
+        if len(self._cards) == 2 and self.value() == 21:
+            isBlackjack = True
         return isBlackjack
 
     def is_busted(self):

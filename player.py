@@ -17,8 +17,8 @@ class Player(object):
 
     def play(self, hand):
         """Returns a players move (either hit, stand, double, or split)."""
-        commandString = '[H]it     [D]ouble        [S]plit      s[T]and\n'
-        validCommands = 'HSDT'
+        commandString = '[H]it     [D]ouble     [S]tand     s[P]lit\n'
+        validCommands = 'HSPD'
         print(commandString)
         print(hand)
         prompt = f"Your move {self._name}: "
@@ -31,6 +31,9 @@ class Player(object):
     def get_hands(self):
         return self._hands
 
+    def set_hands(self, hands):
+        self._hands = hands
+
     def get_name(self):
         return self._name
 
@@ -42,4 +45,4 @@ class Player(object):
 
     money = property(get_money, set_money)
     name = property(get_name)
-    hands = property(get_hands)
+    hands = property(get_hands, set_hands)
