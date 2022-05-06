@@ -78,7 +78,7 @@ class Dealer(object):
             self._hand.hit(card)
         if self._hand.soft_value() > 17:
             self._hand.stand()
-        print(self)
+        print(f'{self}\n')
 
     def player_hit(self, hand):
         """Hits a player's hand."""
@@ -162,5 +162,9 @@ class Dealer(object):
     def get_hand(self):
         return self._hand
 
+    def get_deck(self):
+        return self._deck
+
     hand = property(get_hand)
     money = property(get_money)
+    deck = property(get_deck)

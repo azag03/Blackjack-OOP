@@ -10,7 +10,7 @@ class Table(object):
         self._dealer = Dealer('Roy', 10000, self)
 
     def __str__(self):
-        pass
+        return f'Table 1: Dealer {self._dealer} and {len(self._players)} player[s].'
 
     def manage(self):
         """Runs the blackjack program."""
@@ -23,6 +23,7 @@ class Table(object):
             player = Player(name, 100)
             self._players.append(player)
         self._dealer.take_bets()
+        self._dealer.deck.shuffle()
         while self._players:
             self._dealer.deal()
             self._dealer.play_hands()
