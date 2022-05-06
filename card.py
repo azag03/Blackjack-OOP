@@ -11,7 +11,10 @@ class Card(object):
 
     def __str__(self):
         if self._visibility:
-            string = f'{self._name} of {self._suit} {self._shortSuit}: {self._hardValue}'
+            if self._name == 'Ace':
+                string = f'{self._shortName} of {self._suit} {self._shortSuit}: {self._hardValue} or {self._softValue}'
+            else:
+                string = f'{self._shortName} of {self._suit} {self._shortSuit}: {self._hardValue}'
         else:
             string = 'Cool card design'
         return string

@@ -14,6 +14,7 @@ class Table(object):
 
     def manage(self):
         """Runs the blackjack program."""
+        print("WELCOME TO BLACKJACK!\n")
         numberOfPlayers = get_integer_between(1, 7, 'How many players will there be?')
         #
         # Range from 1 to numberOfPlayers+1, so I don't ask for player 0's name
@@ -22,8 +23,10 @@ class Table(object):
             name = input(f"What is player {number}'s name? ")
             player = Player(name, 100)
             self._players.append(player)
+        print('')
         self._dealer.take_bets()
         self._dealer.deck.shuffle()
+        print('')
         while self._players:
             self._dealer.deal()
             self._dealer.play_hands()

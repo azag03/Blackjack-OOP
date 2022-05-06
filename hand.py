@@ -22,7 +22,7 @@ class Hand(object):
         elif self.is_busted():
             string += 'Hand is busted (hand is no longer playable)'
         elif self.is_blackjack():
-            string += 'Blackjack!!'
+            string += 'Blackjack!!\n'
         return string
 
     def soft_value(self):

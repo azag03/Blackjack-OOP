@@ -26,6 +26,7 @@ class Player(object):
         while command not in validCommands:
             prompt += '(type the corresponding letter) '
             command = input(prompt).upper()
+        print('')
         return command
 
     def get_hands(self):

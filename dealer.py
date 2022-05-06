@@ -18,19 +18,24 @@ class Dealer(object):
 
     def take_bets(self):
         """Allows the player to place an initial bet; creates a hand from that bet."""
-        hand = None
+        leavingPlayers = []
         for player in self._table.players:
             bet = get_integer_between(-1, player.money, f'How much would you like to bet this round, {player.name}?')
             if bet == 0:
-                print(f'{player.name} is sitting out this hand.')
+                print(f'{player.name} is sitting out this hand.\n')
             elif bet == -1:
-                print(f'{player.name} has left the table.')
-                self.player_leave(player)
+                print(f'{player.name} has left the table.\n')
+                leavingPlayers.append(player)
             else:
                 hand = Hand(bet)
                 player.money -= bet
                 player.hands.append(hand)
-        return hand
+        #
+        # Must happen outside the for loop to ensure that when someone leaves the program doesn't skip over the
+        # succeeding player.
+        #
+        for player in leavingPlayers:
+            self.player_leave(player)
 
     def deal(self):
         """Passes out the initial two cards to the dealer and each of the players."""
@@ -47,8 +52,6 @@ class Dealer(object):
                     card.flip()
                     hand.hit(card)
         print(self)
-        for player in self._table.players:
-            print(player)
 
     def play_hands(self):
         """Loops through each players' hand and performs their desired action."""
@@ -64,21 +67,21 @@ class Dealer(object):
                         self.player_double(hand)
                     elif command == 'P':
                         self.player_split(player, hand)
-        for player in self._table.players:
-            print(player)
+        # for player in self._table.players:
+        # print(player)
 
     def play_own(self):
         """Plays the dealer's hand."""
         #
         # Dealer must hit on soft-values below 17 and stand on 17 and above.
         #
-        while self._hand.soft_value() < 17:
+        while self._hand.value() < 17:
             card = self._deck.pop()
             card.flip()
             self._hand.hit(card)
-        if self._hand.soft_value() > 17:
+        if self._hand.value() > 17:
             self._hand.stand()
-        print(f'{self}\n')
+        # print(f'{self}\n')
 
     def player_hit(self, hand):
         """Hits a player's hand."""
@@ -136,25 +139,25 @@ class Dealer(object):
             for hand in player.hands:
                 if hand.is_busted():
                     self._money += hand.bet
-                    print('Player hand is busted.')
+                    print(f"{player.name}'s hand is busted.")
                 elif hand.value() == self._hand.value():
                     player.money += hand.bet
-                    print('Player and dealer hands have the same value.')
+                    print(f"{player.name}'s hand has the same value as the dealer.")
                 elif hand.is_blackjack():
                     player.money += 2.5 * hand.bet
-                    print('Player hand is blackjack.')
+                    print(f"{player.name} has blackjack!!")
                 elif self._hand.is_busted():
                     player.money += 2 * hand.bet
-                    print('Dealer hand is busted.')
+                    print(f'Dealer has busted. {player.name} wins the hand.')
                 elif hand.value() < self._hand.value():
                     self._money += hand.bet
-                    print('Dealer hand is higher.')
+                    print(f"Dealer's hand is higher than {player.name}'s.")
                 elif hand.value() > self._hand.value():
                     player.money += 2 * hand.bet
-                    print('Player hand is higher.')
-        print(self._money)
+                    print(f"{player.name}'s hand is higher than the dealer's.")
+        print(f"\nDealer's Money: {self._money}")
         for player in self._table.players:
-            print(player.money)
+            print(f"{player.name}'s money: {player.money}")
 
     def get_money(self):
         return self._money

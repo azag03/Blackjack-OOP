@@ -37,7 +37,7 @@ class BlackjackDeck(Deck):
                 for name, shortName in zip(BlackjackDeck.names, BlackjackDeck.shortNames):
                     hardValue = BlackjackDeck.hardValues[shortName]
                     softValue = BlackjackDeck.softValues[shortName]
-                    card = Card(hardValue, softValue, shortName, name, suit, shortSuit)
+                    card = Card(hardValue, softValue, name, shortName, suit, shortSuit)
                     self._cards.append(card)
 
     def stack(self):
