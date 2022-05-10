@@ -51,7 +51,7 @@ class Dealer(object):
                     card = self._deck.pop()
                     card.flip()
                     hand.hit(card)
-        print(self)
+        print(f"Dealer is showing:\n{self._hand.cards[0]}\n{self._hand.cards[1]}\n")
 
     def play_hands(self):
         """Loops through each players' hand and performs their desired action."""
