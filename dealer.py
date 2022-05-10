@@ -144,15 +144,18 @@ class Dealer(object):
                     player.money += hand.bet
                     print(f"{player.name}'s hand has the same value as the dealer.")
                 elif hand.is_blackjack():
+                    self._money -= 2.5 * hand.bet
                     player.money += 2.5 * hand.bet
                     print(f"{player.name} has blackjack!!")
                 elif self._hand.is_busted():
+                    self._money -= 2 * hand.bet
                     player.money += 2 * hand.bet
                     print(f'Dealer has busted. {player.name} wins the hand.')
                 elif hand.value() < self._hand.value():
                     self._money += hand.bet
                     print(f"Dealer's hand is higher than {player.name}'s.")
                 elif hand.value() > self._hand.value():
+                    self._money -= 2 * hand.bet
                     player.money += 2 * hand.bet
                     print(f"{player.name}'s hand is higher than the dealer's.")
         print(f"\nDealer's Money: {self._money}")
