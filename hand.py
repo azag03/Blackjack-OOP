@@ -12,9 +12,10 @@ class Hand(object):
 
     def __str__(self):
         string = f'Bet: {self._bet}\n'
-        string += 'Hand:\n'
+        string += 'Hand: \n'
         for card in self._cards:
             string += f'{card}\n'
+        string += f'Value: {self.value()}\n'
         if self.isStood:
             string += 'Player chose to stand (hand is no longer playable)'
         elif self.isDoubled:
